@@ -1,5 +1,4 @@
 const { compareDates } = require('../utils/compareDates');
-const { v4: uuid } = require('uuid');
 
 let expenses = [];
 
@@ -10,8 +9,8 @@ const getAll = ({ userId, categories, from, to }) => {
     result = result.filter((e) => String(e.userId) === userId);
   }
 
-  if (categories && Array.isArray(categories)) {
-    result = result.filter((e) => e.category === categories);
+  if (categories) {
+    result = result.filter((e) => categories.includes(e.category));
   }
 
   if (from) {
@@ -31,7 +30,7 @@ const getById = (id) => {
 
 const create = ({ userId, spentAt, title, amount, category, note }) => {
   const expense = {
-    id: uuid(),
+    id: Math.floor(Math.random() * 1_000_000_000),
     userId,
     spentAt,
     title,
