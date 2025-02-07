@@ -12,7 +12,7 @@ const getById = (req, res) => {
   const expense = expensesService.getById(id);
 
   if (!expense) {
-    return res.sendStatus(404);
+    return res.status(404).json({ message: 'This id was not found' });
   }
 
   res.status(200).send(expense);
@@ -23,13 +23,29 @@ const create = (req, res) => {
   const user = usersService.getById(String(userId));
 
   if (!user || !spentAt || !title || !amount || !category) {
-    return res.sendStatus(400);
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  if (isNaN(Date.parse(spentAt))) {
+    return res.status(400).json({ message: 'Invalid date format' });
+  }
+
+  if (typeof title !== 'string' || title.trim() === '') {
+    return res
+      .status(400)
+      .json({ message: 'Title must be a non-empty string' });
+  }
+
+  if (typeof category !== 'string' || category.trim() === '') {
+    return res
+      .status(400)
+      .json({ message: 'Category must be a non-empty string' });
   }
 
   if (typeof amount !== 'number' || amount <= 0) {
     return res
       .status(400)
-      .json({ message: 'Amount is not a number or is not positive' });
+      .json({ message: 'Amount must be a positive number' });
   }
 
   try {
@@ -44,7 +60,10 @@ const create = (req, res) => {
 
     res.status(201).send(newExpense);
   } catch {
-    res.sendStatus(500);
+    res.status(500).json({
+      message:
+        'The server failed to complete the request due to an unexpected error.',
+    });
   }
 };
 

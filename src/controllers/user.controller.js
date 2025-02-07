@@ -9,24 +9,25 @@ const getById = (req, res) => {
   const user = usersService.getById(id);
 
   if (!user) {
-    return res.sendStatus(404);
+    return res.status(404).json({ message: 'This id was not found' });
   }
 
-  res.statusCode = 200;
-  res.send(user);
+  res.status(200).send(user);
 };
 
 const create = (req, res) => {
   const { name } = req.body;
 
   if (!name) {
-    return res.sendStatus(400);
+    return res.status(400).json({
+      message:
+        'the server could not understand the request due to invalid syntax',
+    });
   }
 
   const user = usersService.create(name);
 
-  res.statusCode = 201;
-  res.send(user);
+  res.status(201).send(user);
 };
 
 const remove = (req, res) => {
@@ -49,7 +50,10 @@ const update = (req, res) => {
   }
 
   if (!name) {
-    return res.sendStatus(400);
+    return res.send(400).json({
+      message:
+        'the server could not understand the request due to invalid syntax',
+    });
   }
 
   const updated = usersService.update({ id, name });

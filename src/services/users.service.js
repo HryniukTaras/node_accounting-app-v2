@@ -1,3 +1,5 @@
+const { v4: uuid } = require('uuid');
+
 let users = [];
 
 const getAll = () => {
@@ -10,7 +12,7 @@ const getById = (id) => {
 
 const create = (name) => {
   const user = {
-    id: Math.trunc(Date.now() + Math.random()),
+    id: uuid(),
     name,
   };
 
@@ -26,7 +28,9 @@ const remove = (id) => {
 const update = ({ id, name }) => {
   const toUpdate = getById(id);
 
-  Object.assign(toUpdate, { ...toUpdate, name });
+  if (toUpdate !== null) {
+    Object.assign(toUpdate, { ...toUpdate, name });
+  }
 
   return toUpdate;
 };

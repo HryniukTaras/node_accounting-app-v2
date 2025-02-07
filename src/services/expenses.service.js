@@ -1,4 +1,5 @@
 const { compareDates } = require('../utils/compareDates');
+const { v4: uuid } = require('uuid');
 
 let expenses = [];
 
@@ -9,7 +10,7 @@ const getAll = ({ userId, categories, from, to }) => {
     result = result.filter((e) => String(e.userId) === userId);
   }
 
-  if (categories) {
+  if (categories && Array.isArray(categories)) {
     result = result.filter((e) => e.category === categories);
   }
 
@@ -30,7 +31,7 @@ const getById = (id) => {
 
 const create = ({ userId, spentAt, title, amount, category, note }) => {
   const expense = {
-    id: Math.trunc(Date.now() + Math.random()),
+    id: uuid(),
     userId,
     spentAt,
     title,
@@ -51,7 +52,9 @@ const remove = (id) => {
 const update = (id, data) => {
   const toUpdate = getById(id);
 
-  Object.assign(toUpdate, data);
+  if (toUpdate !== null) {
+    Object.assign(toUpdate, data);
+  }
 
   return toUpdate;
 };
