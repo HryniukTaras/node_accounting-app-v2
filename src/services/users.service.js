@@ -1,5 +1,3 @@
-const { v4: uuid } = require('uuid');
-
 let users = [];
 
 const getAll = () => {
@@ -12,7 +10,7 @@ const getById = (id) => {
 
 const create = (name) => {
   const user = {
-    id: uuid(),
+    id: Math.floor(Math.random() * 1_000_000_000),
     name,
   };
 
